@@ -1,5 +1,6 @@
 use wasm_bindgen::prelude::*;
 pub mod ball;
+pub mod paddle;
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.

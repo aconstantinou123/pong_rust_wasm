@@ -1,6 +1,7 @@
-import { Ball } from "pong";
+import { Ball, Paddle } from "pong";
 
 let ball
+let playerPaddle = Paddle.new_player()
 const height = 750
 const width = 1250
 
@@ -8,7 +9,6 @@ const canvas = document.getElementById("pong-canvas")
 canvas.height = height
 canvas.width = width
 const ctx = canvas.getContext('2d')
-
 
 const clearRect = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -24,6 +24,7 @@ const generateBall = () => {
   ball = Ball.new(x, y, speed_x, speed_y)
 }
 
+
 generateBall()
 
 
@@ -31,7 +32,20 @@ const animate = window.requestAnimationFrame ||
                 window.webkitRequestAnimationFrame ||
                 window.mozRequestAnimationFrame ||
                 function(callback) { window.setTimeout(callback, 1000/60) }
-          
+
+const renderPaddles = () => {
+  ctx.fillRect(playerPaddle.get_x(), playerPaddle.get_y(), playerPaddle.get_width(), playerPaddle.get_height())
+}
+
+
+document.addEventListener('keydown', (event) => {
+  const key = event.key
+  if(key === 's'){
+    playerPaddle.move_up()
+  } else if(key === 'w'){
+    playerPaddle.move_down()
+  }
+})
 
 const renderBall = () => {
   if(!ball.get_in_play()){
@@ -55,6 +69,7 @@ const update = () => {
 var render = () => {
   clearRect()
   renderBall()
+  renderPaddles()
 };
                 
 

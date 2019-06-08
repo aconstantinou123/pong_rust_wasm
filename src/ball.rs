@@ -58,8 +58,6 @@ impl Ball {
     }
 
     pub fn move_ball(&mut self) {
-        //bottom
-        log!("{}", self.y - self.radius);
         if self.y - self.radius <= 0 {
             self.speed_y = -self.speed_y;
         }
