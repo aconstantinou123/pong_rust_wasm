@@ -1,4 +1,5 @@
 use wasm_bindgen::prelude::*;
+use crate::paddle::Paddle;
 
 extern crate web_sys;
 
@@ -57,15 +58,19 @@ impl Ball {
         self.in_play
     }
 
-    pub fn move_ball(&mut self) {
+    pub fn move_ball(&mut self, player_paddle: &Paddle) {
+        // log!("{:?}", player_paddle.get_y_positions().contains(&self.y));
+        // log!("{:?}", &self.y);
         if self.y - self.radius <= 0 {
             self.speed_y = -self.speed_y;
         }
         if self.y + self.radius >= 750 {
             self.speed_y = -self.speed_y;
         }
-        if self.x - self.radius <= 0 {
+        if self.x - self.radius <= player_paddle.get_x() + self.radius
+        && player_paddle.get_y_positions().contains(&self.y) {
             self.speed_x = -self.speed_x;
+            self.speed_y = - self.speed_y;
         } 
         if self.x + self.radius >= 1250 {
             self.speed_x = -self.speed_x;

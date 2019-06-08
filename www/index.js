@@ -21,6 +21,7 @@ const generateBall = () => {
   const y = getRandomInt(750)
   const speed_x = getRandomInt(10)
   const speed_y = getRandomInt(10)
+  // ball = Ball.new(x, 375, 10, 0)
   ball = Ball.new(x, y, speed_x, speed_y)
 }
 
@@ -63,7 +64,7 @@ var step = () => {
 }
 
 const update = () => {
-  ball.move_ball()
+  ball.move_ball(playerPaddle)
 };
 
 var render = () => {

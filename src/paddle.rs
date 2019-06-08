@@ -65,10 +65,18 @@ impl Paddle {
     }
 
     pub fn move_up(&mut self) {
-        self.y += self.speed_y
+        self.y += self.speed_y;
+        self.y_positions = self.y_positions
+        .iter()
+        .map(|y| y + self.speed_y)
+        .collect();
     }
 
     pub fn move_down(&mut self) {
-        self.y -= self.speed_y
+        self.y -= self.speed_y;
+        self.y_positions = self.y_positions
+        .iter()
+        .map(|y| y - self.speed_y)
+        .collect();
     }
 }
