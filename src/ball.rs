@@ -59,7 +59,9 @@ impl Ball {
     }
 
     pub fn move_ball(&mut self, player_paddle: &Paddle, computer_paddle: &Paddle) {
-
+        // log!("{}", computer_paddle.get_y_positions().contains(&self.y));
+        // log!("{}", computer_paddle.get_x() + self.radius - computer_paddle.get_width());
+        // log!("{}", self.x - self.radius >= computer_paddle.get_x() + self.radius - computer_paddle.get_width());
         if self.y - self.radius <= 0 {
             self.speed_y = -self.speed_y;
         }
@@ -73,9 +75,10 @@ impl Ball {
             self.speed_x = -self.speed_x;
             self.speed_x += 1;
         } 
-         if self.x - self.radius >= computer_paddle.get_x() - self.radius
+        if self.x - self.radius >= computer_paddle.get_x() - self.radius
         && computer_paddle.get_y_positions().contains(&self.y) 
         && computer_paddle.get_paddle_type() == PaddleType::Computer {
+            // log!("here");
             self.speed_x = -self.speed_x;
             self.speed_x -= 1;
         } 
