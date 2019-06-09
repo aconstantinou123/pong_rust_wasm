@@ -1,4 +1,5 @@
 use wasm_bindgen::prelude::*;
+use crate::ball::Ball;
 
 extern crate web_sys;
 
@@ -10,6 +11,13 @@ macro_rules! log {
 }
 
 #[wasm_bindgen]
+#[derive(Debug, Clone, PartialEq)]
+pub enum PaddleType {
+    Computer,
+    Player,
+}
+
+#[wasm_bindgen]
 #[derive(Debug, Clone)]
 pub struct Paddle {
     x: i32,
@@ -17,7 +25,8 @@ pub struct Paddle {
     height: i32,
     width: i32,
     speed_y: i32,
-    y_positions: Vec<i32>
+    y_positions: Vec<i32>,
+    paddle_type: PaddleType,
 }
 
 #[wasm_bindgen]
@@ -30,6 +39,7 @@ impl Paddle {
         let width = 20;
         let speed_y = 20;
         let y_positions = (y.. (y + height)).collect();
+        let paddle_type = PaddleType::Player;
         Paddle {
             x,
             y,
@@ -37,7 +47,31 @@ impl Paddle {
             width,
             speed_y,
             y_positions,
+            paddle_type,
         }
+    }
+
+    pub fn new_computer() -> Paddle {
+        let x = 1150;
+        let y = 300;
+        let height = 100;
+        let width = 20;
+        let speed_y = 20;
+        let y_positions = (y.. (y + height)).collect();
+        let paddle_type = PaddleType::Computer;
+        Paddle {
+            x,
+            y,
+            height,
+            width,
+            speed_y,
+            y_positions,
+            paddle_type,
+        }
+    }
+
+    pub fn get_paddle_type(&self) -> PaddleType {
+        self.paddle_type.clone()
     }
 
     pub fn get_y_positions(&self) -> Vec<i32> {
@@ -65,18 +99,30 @@ impl Paddle {
     }
 
     pub fn move_up(&mut self) {
-        self.y += self.speed_y;
-        self.y_positions = self.y_positions
-        .iter()
-        .map(|y| y + self.speed_y)
-        .collect();
+        if self.y < 650 {
+            self.y += self.speed_y;
+            self.y_positions = self.y_positions
+            .iter()
+            .map(|y| y + self.speed_y)
+            .collect();
+        }
+    }
+
+    pub fn computer_ai(&mut self, ball: &Ball){
+        if ball.get_y() >= self.y && !self.get_y_positions().contains(&ball.get_y()) {
+            self.move_up()
+        } else if ball.get_y() <= self.y && !self.get_y_positions().contains(&ball.get_y()) {
+            self.move_down()
+        }
     }
 
     pub fn move_down(&mut self) {
-        self.y -= self.speed_y;
-        self.y_positions = self.y_positions
-        .iter()
-        .map(|y| y - self.speed_y)
-        .collect();
+        if self.y > 0 {
+            self.y -= self.speed_y;
+            self.y_positions = self.y_positions
+            .iter()
+            .map(|y| y - self.speed_y)
+            .collect();
+        }
     }
 }

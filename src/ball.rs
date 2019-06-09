@@ -1,5 +1,5 @@
 use wasm_bindgen::prelude::*;
-use crate::paddle::Paddle;
+use crate::paddle::{Paddle, PaddleType};
 
 extern crate web_sys;
 
@@ -58,9 +58,8 @@ impl Ball {
         self.in_play
     }
 
-    pub fn move_ball(&mut self, player_paddle: &Paddle) {
-        // log!("{:?}", player_paddle.get_y_positions().contains(&self.y));
-        // log!("{:?}", &self.y);
+    pub fn move_ball(&mut self, player_paddle: &Paddle, computer_paddle: &Paddle) {
+
         if self.y - self.radius <= 0 {
             self.speed_y = -self.speed_y;
         }
@@ -68,15 +67,25 @@ impl Ball {
             self.speed_y = -self.speed_y;
         }
         if self.x - self.radius <= player_paddle.get_x() + self.radius
-        && player_paddle.get_y_positions().contains(&self.y) {
+        && self.x - self.radius >= player_paddle.get_x() + self.radius - player_paddle.get_width()
+        && player_paddle.get_y_positions().contains(&self.y) 
+        && player_paddle.get_paddle_type() == PaddleType::Player {
             self.speed_x = -self.speed_x;
-            self.speed_y = - self.speed_y;
+            self.speed_x += 1;
+        } 
+         if self.x - self.radius >= computer_paddle.get_x() - self.radius
+        && computer_paddle.get_y_positions().contains(&self.y) 
+        && computer_paddle.get_paddle_type() == PaddleType::Computer {
+            self.speed_x = -self.speed_x;
+            self.speed_x -= 1;
         } 
         if self.x + self.radius >= 1250 {
-            self.speed_x = -self.speed_x;
+            self.in_play = false
         } 
+        if self.x + self.radius <= 0 {
+            self.in_play = false
+        }
         self.x += self.speed_x;
         self.y += self.speed_y;
-    }
-    
+    }    
 } 
