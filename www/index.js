@@ -42,9 +42,9 @@ const renderPaddles = () => {
 document.addEventListener('keydown', (event) => {
   const key = event.key
   if(key === 's'){
-    playerPaddle.move_up()
+    playerPaddle.move_up(20)
   } else if(key === 'w'){
-    playerPaddle.move_down()
+    playerPaddle.move_down(-20)
   }
 })
 

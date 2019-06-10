@@ -73,13 +73,14 @@ impl Ball {
         && player_paddle.get_y_positions().contains(&self.y) 
         && player_paddle.get_paddle_type() == PaddleType::Player {
             self.speed_x = -self.speed_x;
+            self.speed_y += player_paddle.get_speed_y() / 10;
             self.speed_x += 1;
         } 
         if self.x - self.radius >= computer_paddle.get_x() - self.radius
         && computer_paddle.get_y_positions().contains(&self.y) 
         && computer_paddle.get_paddle_type() == PaddleType::Computer {
-            // log!("here");
             self.speed_x = -self.speed_x;
+            self.speed_y += computer_paddle.get_speed_y() / 10;
             self.speed_x -= 1;
         } 
         if self.x + self.radius >= 1250 {

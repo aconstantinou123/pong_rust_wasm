@@ -100,25 +100,27 @@ impl Paddle {
 
 
     pub fn computer_ai(&mut self, ball: &Ball){
-        if ball.get_y() >= self.y && !self.get_y_positions().contains(&ball.get_y()) {
-            self.move_up()
-        } else if ball.get_y() <= self.y && !self.get_y_positions().contains(&ball.get_y()) {
-            self.move_down()
+            let mut diff = -((self.y + (self.height / 2)) -  ball.get_y());
+            if diff < 0 && diff < -9 {
+                diff = -10;
+            } else if diff > 0 && diff > 9  {
+                diff = 10;
+            }
+        if ball.get_x() > 300 && ball.get_y() >= self.y && !self.get_y_positions().contains(&ball.get_y()) {
+            self.move_up(diff)
+        } else if ball.get_x() > 300 && ball.get_y() <= self.y && !self.get_y_positions().contains(&ball.get_y()) {
+            self.move_down(diff)
         }
     }
 
-    pub fn move_up(&mut self) {
+    pub fn move_up(&mut self, speed: i32) {
         if self.y < 650 {
-             if self.speed_y <= 0 {
-                self.speed_y = 4;
-            }
-            
-            self.speed_y += 4;
+            self.speed_y = speed;
             self.y += self.speed_y;
         } else {
             self.y = 650;
             self.speed_y = 0;
-             self.y_positions = (self.y.. (self.y + self.height)).collect();
+            self.y_positions = (self.y.. (self.y + self.height)).collect();
         }
         self.y_positions = self.y_positions
             .iter()
@@ -126,12 +128,9 @@ impl Paddle {
             .collect();
     }
 
-    pub fn move_down(&mut self) {
+    pub fn move_down(&mut self, speed: i32) {
         if self.y > 0 {
-            if self.speed_y >= 0 {
-                self.speed_y = -4;
-            }
-            self.speed_y -= 4;
+            self.speed_y = speed;
             self.y += self.speed_y;
         } else {
             self.y = 0;
